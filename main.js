@@ -58,7 +58,7 @@ class Team {
   #questions; //list of questions in json data form
 
   constructor(name) {
-    this.#songElement = document.getElementById(`${name}Song`);
+    this.#songElement = document.getElementById(`${name.toLowerCase().replaceAll(" ", "")}Song`);
     this.#name = name;
     this.#song;
     this.#score = 0;
@@ -119,7 +119,12 @@ class Team {
 
 function generateTeamQuestions() {
   for (let i = 0; i < 12; i++) {
-    team1.addQuestion(questionData[Math.floor(Math.random() * questionData.length)])
+    let question1 = questionData[Math.floor(Math.random() * questionData.length)];
+    questionData.splice(questionData.indexOf(question1), 1);
+    team1.addQuestion(question1);
+
+    let question2 = questionData[Math.floor(Math.random() * questionData.length)];
+    questionData.splice(questionData.indexOf(question2), 1);
     team2.addQuestion(questionData[Math.floor(Math.random() * questionData.length)])
   }
 }
@@ -160,7 +165,7 @@ function shuffle(array) {
 //Really bad but I'm just rushing to get this project done so good code out the window :)
 let askTeam = 1;
 function askQuestion() {
-  solutionForm.children = [];
+  solutionForm.querySelectorAll("*").forEach(child => child.remove());
   if (askTeam == 2 && answeredQuestions == 6) {
     endGame();
     return;
@@ -248,9 +253,9 @@ function checkAnswer(team, question, answer) {
   } else {
     //wrong
     swal({
-      title: "Wrong!",
+      title: question.correctAnswer.value,
       text: question.correctAnswer.explanation,
-      icon: "danger"
+      icon: "warning"
     }).then(() => {
       askQuestion();
     });
@@ -262,8 +267,8 @@ function checkAnswer(team, question, answer) {
 //Start the game
 function start() {
   parseSongs();
-  team1 = new Team("team1");
-  team2 = new Team("team2");
+  team1 = new Team("Team 1");
+  team2 = new Team("Team 2");
   generateTeamQuestions();
 
   //game loop
