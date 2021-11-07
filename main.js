@@ -3,7 +3,8 @@ let team2;
 let songs = [];
 
 
-//We use a song class in here instead of raw json data from songs.js file to so we can have less redundant logic in our recursive game-function loop
+//We use a song class in here instead of raw json data from songs.js file to so we can have less redundant logic in our recursive game-function loop,
+//and to avoid overloading the Team Class
 class Song {
 
   #name; //name of the song
@@ -61,6 +62,7 @@ class Team {
 
   #assignSong() {
     this.#song = songs[Math.floor(Math.random() * songs.length)];
+    this.updateSongHtml();
   }
 
   getSong() {
@@ -78,6 +80,17 @@ class Team {
   isDone() {
     return this.getPercentComplete == 1;
   }
+
+  updateSongHtml() {
+    let html = "";
+    let status = "hidden";
+    for (var i = 0; i < this.#song.getLyrics().length; i++) {
+      if (i < this.getScore()) status = "revealed";
+      html += `<p class="${status}">${this.#song.getLyrics()[i]}</p>`;
+    }
+    this.#songElement.innerHTML = html;
+  }
+
 }
 
 function generateTeamQuestions() {
