@@ -1,12 +1,12 @@
-{
+let songData = [
   {
-    "songName": "name",
+    "name": "name1",
     "author": "author name here",
     "lyrics": ["....", "...."]
   },
   {
-    "songName": "name",
+    "name": "name2",
     "author": "author name here",
     "lyrics": ["....", "...."]
-  },
-}
+  }
+];

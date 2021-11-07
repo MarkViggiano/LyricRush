@@ -86,7 +86,7 @@ function generateTeamQuestions() {
 
 function parseSongs() {
   //songData is variable from songs.js which is referenced before this file in index.html
-  for (const song of songData) songs.append(new Song(song.name, song.author, song.lyrics));
+  for (const song of songData) songs.push(new Song(song.name, song.author, song.lyrics));
 }
 
 //Start the game

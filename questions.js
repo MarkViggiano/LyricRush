@@ -1,4 +1,4 @@
-{
+let questionData = [
   {
     "question name": "name here",
     "correctAnswer": {
@@ -17,4 +17,4 @@
     "answers": ["false answer1", "false answer2"]
   }
 
-}
+];
