@@ -1,6 +1,6 @@
 let questionData = [
   {
-    "question name": "name here",
+    "name": "name here",
     "correctAnswer": {
       "value": "answer text here",
       "explanation": "background context here"
@@ -9,7 +9,7 @@ let questionData = [
   },
 
   {
-    "question name": "name here",
+    "name": "name here",
     "correctAnswer": {
       "value": "answer text here",
       "explanation": "background context here"

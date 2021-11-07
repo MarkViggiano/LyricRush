@@ -1,1 +1,11 @@
+body {
+  overflow-x: hidden;
+}
 
+.hidden {
+  color: lightgray;
+}
+
+.revealed {
+  color: black;
+}
