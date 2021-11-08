@@ -142,16 +142,27 @@ function checkSong(winner, loser, guessedDetails) {
       text: `Sorry ${winner.getName()} but ${loser.getName()} got it right! Start singing!`,
       icon: "success"
     })
+
+    while (loser.getScore() < 12) {
+      loser.addScore();
+    }
+
+    loser.updateSongHtml();
   } else {
     swal({
       title: "Failed!",
       text: `Sorry ${loser.getName()} but you got it wrong... it was: ${song.getName()} by ${song.getAuthor()}...`,
       icon: "danger"
     })
+
+    while (winner.getScore() < 12) {
+      winner.addScore();
+    }
+
+    winner.updateSongHtml();
   }
 
   questionModal.toggle();
-
 }
 
 function endGame() {
@@ -180,6 +191,13 @@ function endGame() {
       text: `${winner.getName()} got all their questions correct! Sorry ${loser.getName()} you gotta sing anyways...`,
       icon: "info"
     })
+
+    while (winner.getScore() < 12) {
+      winner.addScore();
+    }
+
+    winner.updateSongHtml();
+
   }
 
   questionLabel.innerHTML = loser.getName() + " || What is the name of the winner's song and who wrote it?";
