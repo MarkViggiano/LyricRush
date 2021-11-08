@@ -120,12 +120,12 @@ class Team {
 function generateTeamQuestions() {
   for (let i = 0; i < 12; i++) {
     let question1 = questionData[Math.floor(Math.random() * questionData.length)];
-    questionData.splice(questionData.indexOf(question1), 1);
     team1.addQuestion(question1);
+    questionData.splice(questionData.indexOf(question1), 1);
 
     let question2 = questionData[Math.floor(Math.random() * questionData.length)];
+    team2.addQuestion(question2);
     questionData.splice(questionData.indexOf(question2), 1);
-    team2.addQuestion(questionData[Math.floor(Math.random() * questionData.length)])
   }
 }
 
@@ -134,13 +134,93 @@ function parseSongs() {
   for (const song of songData) songs.push(new Song(song.name, song.author, song.lyrics));
 }
 
-function endGame() {
-  if (team1.getScore() >= team2.getScore()) {
-    //team 1 wins
+function checkSong(winner, loser, guessedDetails) {
+  let song = winner.getSong();
+  if (guessedDetails[0] == song.getName() && guessedDetails[1] == song.getAuthor()) {
+    swal({
+      title: "Swapped!",
+      text: `Sorry ${winner.getName()} but ${loser.getName()} got it right! Start singing!`,
+      icon: "success"
+    })
+  } else {
+    swal({
+      title: "Failed!",
+      text: `Sorry ${loser.getName()} but you got it wrong... it was: ${song.getName()} by ${song.getAuthor()}...`,
+      icon: "danger"
+    })
+  }
 
+  questionModal.close();
+
+}
+
+function endGame() {
+  let winner;
+  let loser;
+  if (team1.getScore() > team2.getScore()) {
+    //team 1 wins
+    winner = team1;
+    loser = team2;
+  } else if (team1.getScore() == team2.getScore()){
+    swal({
+      title: "Draw!",
+      text: "You both get to sing! Good luck!",
+      icon: "info"
+    })
+    return;
   } else {
     //team 2 wins
+    winner = team2;
+    loser = team1;
   }
+
+  questionLabel.innerHTML = loser.getName() + " || What is the name of the winner's song and who wrote it?";
+  let answers = [];
+
+  //make html stuff for correctAnswer
+  let solutionNode = document.createElement("div");
+  solutionNode.classList.add("form-check");
+  let input = document.createElement("input");
+  input.classList.add("form-check-input");
+  input.type = "radio";
+  input.id = winner.getSong().getName();
+  input.onclick = () => checkSong(winner, loser, [winner.getSong().getName(), winner.getSong().getAuthor()]);
+
+  let label = document.createElement("label");
+  label.classList.add("form-check-label");
+  label.for = winner.getSong().getName();
+  label.innerHTML = winner.getSong().getName() + " by " + winner.getSong().getAuthor();
+  solutionNode.appendChild(input);
+  solutionNode.appendChild(label);
+  answers.push(solutionNode);
+
+  for (let i = 0; i < songs.length; i++) {
+    let song = songs[i];
+    if (song.getName() == winner.getSong().getName()) continue;
+    let solutionNode = document.createElement("div");
+    solutionNode.classList.add("form-check");
+    let input = document.createElement("input");
+    input.classList.add("form-check-input");
+    input.type = "radio";
+    input.id = song.getName();
+    input.onclick = () => checkSong(winner, loser, [song.getName(), song.getAuthor()]);
+
+    let label = document.createElement("label");
+    label.classList.add("form-check-label");
+    label.for = song.getName();
+    label.innerHTML = song.getName() + " by " + song.getAuthor();
+    solutionNode.appendChild(input);
+    solutionNode.appendChild(label);
+    answers.push(solutionNode);
+  }
+
+  answers = shuffle(answers);
+  for (const answer of answers) {
+    solutionForm.appendChild(answer);
+  }
+
+  questionModal.show();
+
 }
 
 function shuffle(array) {
