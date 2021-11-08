@@ -150,7 +150,7 @@ function checkSong(winner, loser, guessedDetails) {
     })
   }
 
-  questionModal.close();
+  questionModal.toggle();
 
 }
 
@@ -172,6 +172,14 @@ function endGame() {
     //team 2 wins
     winner = team2;
     loser = team1;
+  }
+
+  if (winner.getScore() == 12) {
+    swal({
+      title: "Wow!",
+      text: `${winner.getName()} got all their questions correct! Sorry ${loser.getName()} you gotta sing anyways...`,
+      icon: "info"
+    })
   }
 
   questionLabel.innerHTML = loser.getName() + " || What is the name of the winner's song and who wrote it?";
@@ -246,7 +254,7 @@ function shuffle(array) {
 let askTeam = 1;
 function askQuestion() {
   solutionForm.querySelectorAll("*").forEach(child => child.remove());
-  if (askTeam == 2 && answeredQuestions == 6) {
+  if (askTeam == 2 && answeredQuestions == 12) {
     endGame();
     return;
   }
