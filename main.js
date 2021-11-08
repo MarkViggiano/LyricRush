@@ -119,6 +119,7 @@ class Team {
 
 function generateTeamQuestions() {
   for (let i = 0; i < 12; i++) {
+    if (questionData.length <= 1) break;
     let question1 = questionData[Math.floor(Math.random() * questionData.length)];
     team1.addQuestion(question1);
     questionData.splice(questionData.indexOf(question1), 1);
@@ -152,7 +153,7 @@ function checkSong(winner, loser, guessedDetails) {
     swal({
       title: "Failed!",
       text: `Sorry ${loser.getName()} but you got it wrong... it was: ${song.getName()} by ${song.getAuthor()}...`,
-      icon: "danger"
+      icon: "warning"
     })
 
     while (winner.getScore() < 12) {
@@ -178,6 +179,7 @@ function endGame() {
       text: "You both get to sing! Good luck!",
       icon: "info"
     })
+    questionModal.toggle();
     return;
   } else {
     //team 2 wins
@@ -272,7 +274,7 @@ function shuffle(array) {
 let askTeam = 1;
 function askQuestion() {
   solutionForm.querySelectorAll("*").forEach(child => child.remove());
-  if (askTeam == 2 && answeredQuestions == 12) {
+  if (askTeam == 1 && answeredQuestions == 12) {
     endGame();
     return;
   }
